@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect } from 'react'
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { useForm } from 'effector-forms'
 import { updateCostForm } from '../../../store/forms'
-import { Box, Button, LinearProgress, TextField } from '@mui/material'
+import { Box, Button,  TextField } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
-import { selectedId, setSelectedId, updateCostsFx } from '../../../store/costs'
+import {  setSelectedId, updateCostsFx } from '../../../store/costs'
 import { useStore } from 'effector-react'
 import { formatDate } from '../../../utils/arrayUtils'
 
@@ -14,11 +14,10 @@ type TUpdateCostsForm = {
 
 export const UpdateCosts = ({ setEdit, id }: TUpdateCostsForm) => {
 
+
   const { submit, fields, eachValid, values, reset } = useForm(updateCostForm)
   const pending = useStore(updateCostsFx.pending)
   setSelectedId(id)
-
-
 
   const onSubmit = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
