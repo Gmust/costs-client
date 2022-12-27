@@ -1,5 +1,15 @@
 import React, { useState } from 'react'
-import { Alert, Box, Button, Checkbox, FormControlLabel, Grid, InputAdornment, TextField } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  InputAdornment,
+  LinearProgress,
+  TextField,
+} from '@mui/material'
 import { $rememberMe, loginUserFx, setRememberMe } from '../../store/auth'
 import { REGISTRATION_PAGE } from '../../utils/consts'
 import { Link } from 'react-router-dom'
@@ -39,11 +49,13 @@ export const LoginForm = () => {
       {fields.username.errors.length > 0 &&
         <Alert variant='filled' severity='error'>You must use only eng symbols and numbers</Alert>}
       <TextField
-        InputProps={{endAdornment: (
-            <InputAdornment position="start">
-              <Visibility sx={{cursor: 'pointer'}}  onClick={()=> setShowPassword(!showPassword)} />
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='start'>
+              <Visibility sx={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)} />
             </InputAdornment>
-          )}}
+          ),
+        }}
         margin='normal'
         type={showPassword ? 'text' : 'password'}
         id='password'

@@ -1,5 +1,5 @@
 import { $unAuthHost } from './index'
-import { setApiError } from '../store/alerts'
+import { setApiError, setSuccessAlert } from '../store/alerts'
 import { $rememberMe, setIsAuth } from '../store/auth'
 
 
@@ -21,12 +21,10 @@ export class AuthClient {
   static async registration(username: string, password: string) {
     try {
       const result = await $unAuthHost.post('/auth/registration', { username, password })
-
+      setSuccessAlert(result.data)
       return result.status === 201
-
     } catch (e: any) {
       return setApiError(e?.response.data.message)
-
     }
   }
 

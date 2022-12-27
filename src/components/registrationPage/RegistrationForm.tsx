@@ -1,28 +1,31 @@
-import React from 'react'
-import {Alert, Box, Button, Grid, TextField} from '@mui/material'
-import {Link} from 'react-router-dom'
-import {LOGIN_PAGE} from '../../utils/consts'
-import {useForm} from 'effector-forms'
-import {registerForm} from '../../store/forms'
-import {useStore} from 'effector-react'
-import {registerUserFx} from '../../store/auth'
-import {$errorApi} from '../../store/alerts'
+import React, { useEffect } from 'react'
+import { Alert, Box, Button, Grid, TextField } from '@mui/material'
+import { Link } from 'react-router-dom'
+import { LOGIN_PAGE } from '../../utils/consts'
+import { useForm } from 'effector-forms'
+import { registerForm } from '../../store/forms'
+import { useStore } from 'effector-react'
+import { registerUserFx } from '../../store/auth'
+import { $errorApi, $successAlert } from '../../store/alerts'
 
 export const RegistrationForm = () => {
 
-  const {fields, submit, eachValid, isTouched} = useForm(registerForm)
+  const { fields, submit, eachValid, isTouched, reset } = useForm(registerForm)
   const pending = useStore(registerUserFx.pending)
   const apiError = useStore($errorApi)
-
+  const successAlert = useStore($successAlert)
 
   const onSubmit = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
     submit()
   }
 
+  useEffect(() => {
+    successAlert && reset()
+  }, [successAlert])
 
   return (
-    <Box component='form' onSubmit={onSubmit} sx={{mt: 1}}>
+    <Box component='form' onSubmit={onSubmit} sx={{ mt: 1 }}>
       <TextField
         margin='normal'
         error={fields.username.isTouched && fields.username.value.length == 0}
@@ -68,12 +71,13 @@ export const RegistrationForm = () => {
       {fields.confirmation.errors.length > 0 &&
         <Alert variant='filled' severity='error'>Passwords do not corresponds</Alert>}
       {apiError && <Alert variant='filled' severity='warning'>{apiError}</Alert>}
+      {successAlert && <Alert variant='filled' severity='success'>{successAlert}</Alert>}
       <Button
         type='submit'
         fullWidth
         disabled={!eachValid || pending}
         variant='contained'
-        sx={{mt: 3, mb: 2}}
+        sx={{ mt: 3, mb: 2 }}
       >
         Sign Up
       </Button>
