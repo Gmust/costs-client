@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { setIsAuth } from '../store/auth'
 
 
 const $unAuthHost = axios.create({
@@ -28,10 +29,11 @@ $authHost.interceptors.response.use((config) => {
 
   if (error.response.status === 401) {
     try {
-      const response = await $unAuthHost.post('/auth/refresh', {refresh_token, username})
+      const response = await $unAuthHost.post('/auth/refresh', { refresh_token, username })
       localStorage.setItem('token', response.data.access_token)
       return $authHost.request(originalRequest)
-    }catch (e:any){
+    } catch (e: any) {
+      setIsAuth(false)
       console.log('Unauthorized')
     }
   }

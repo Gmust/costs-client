@@ -9,13 +9,11 @@ import CostsList from './CostsList/CostsList'
 
 export const Costs = () => {
 
-
   const [openModal, setOpenModal] = useState<boolean>(false)
   const shouldLoadCosts = useRef(true)
 
   const costs = useStore($costs)
   const pending = useStore(getCostsFx.pending)
-
 
   useEffect(() => {
     if (shouldLoadCosts.current) {
@@ -56,18 +54,14 @@ export const Costs = () => {
 
         <CreateCostModal open={openModal} handleModalClose={handleCloseModal} />
 
-
-        <Stack sx={{mt: 2, width: {xs: '90vw', lg: '60vw'}}} direction='column'>
+        <Box sx={{mt: 2, display: 'flex', flexWrap:'wrap', width: '80vw', alignItems: 'center'}}  >
           {
-            pending &&
-            <CostsSkeleton />
+            pending ?
+            <CostsSkeleton amount={18} />
+              :
+              useMemo(() => <CostsList costs={costs} />, [costs])
           }
-          {
-            useMemo(() => <CostsList costs={costs} />, [costs])
-          }
-        </Stack>
-
-
+        </Box>
       </Box>
     </Container>
   )

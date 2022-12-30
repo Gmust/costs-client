@@ -1,8 +1,8 @@
 import { createForm } from 'effector-forms'
 import { forward } from 'effector'
-import { loginUserFx, registerUserFx } from './auth'
-import { createCostFx, updateCostsFx } from './costs'
-import { formatDate } from '../utils/arrayUtils'
+import { loginUserFx, registerUserFx } from '../auth'
+import { createCostFx, updateCostsFx } from '../costs'
+import { rules } from './formsRules'
 
 
 export const loginForm = createForm({
@@ -10,19 +10,16 @@ export const loginForm = createForm({
     username: {
       init: '',
       rules: [
-        {
-          name: 'username',
-          validator: (value: string) => /^[a-z][a-z0-9]*$/i.test(value),
-        },
+        rules.username(),
+        rules.required(),
+        rules.minLength(4),
       ],
     },
     password: {
       init: '',
       rules: [
-        {
-          name: 'required',
-          validator: (value: string) => Boolean(value),
-        },
+        rules.required(),
+        rules.minLength(6),
       ],
     },
   },
@@ -34,28 +31,23 @@ export const registerForm = createForm({
     username: {
       init: '',
       rules: [
-        {
-          name: 'username',
-          validator: (value: string) => /^[a-z][a-z0-9]*$/i.test(value),
-        },
+        rules.username(),
+        rules.minLength(4),
       ],
     },
     password: {
       init: '',
       rules: [
-        {
-          name: 'required',
-          validator: (value: string) => Boolean(value),
-        },
+        rules.minLength(6),
+        rules.required(),
       ],
     },
     confirmation: {
       init: '',
       rules: [
-        {
-          name: 'confirmation',
-          validator: (confirmation, { password }) => confirmation === password,
-        },
+        rules.passwordConfirmation(),
+        rules.minLength(6),
+        rules.required(),
       ],
     },
   },
@@ -67,34 +59,30 @@ export const createCostForm = createForm({
       init: '' as string,
     },
     price: {
-      init: '' as string,
+      init: 0 as number,
       rules: [
-        {
-          name: 'price',
-          validator: (value: string) => /^[0-9]*$/i.test(value),
-        },
+        rules.priceField(),
       ],
     },
     date: {
-      init: new Date(),
+      init: new Date() as unknown as string,
     },
   },
-  validateOn: ['submit'],
+  validateOn: ['change'],
 })
 
 export const updateCostForm = createForm({
   fields: {
     text: {
       init: '' as string,
-
+      rules: [
+        rules.textField(),
+      ],
     },
     price: {
-      init: '' as string,
+      init: 0 as number,
       rules: [
-        {
-          name: 'price',
-          validator: (value: string) => /^[0-9]*$/i.test(value),
-        },
+        rules.priceField(),
       ],
     },
     date: {
@@ -123,7 +111,6 @@ forward({
 })
 
 forward({
-// @ts-ignore
   from: updateCostForm.formValidated,
   to: updateCostsFx,
 })

@@ -2,7 +2,7 @@ export interface ICosts {
   text: string;
   price: number;
   date: Date | string;
-  _id: number | string;
+  _id?: number | string;
 }
 
 

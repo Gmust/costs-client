@@ -28,12 +28,13 @@ export const $username = auth.createStore<string>('')
   .on(loginUserFx.doneData, (_, data) => data.username)
 
 export const $rememberMe = auth.createStore(false)
-  .on(setRememberMe, (_, value) => value)
+  .on(setRememberMe,  (_, value) => {
+    return !value
+  })
 
 
 export const $isAuth = auth.createStore<boolean>(false)
   .on(loginUserFx.failData, (_, value) => {
-    setIsAuth(false)
     setApiError(value as unknown as string)
   })
   .on(setIsAuth, (_, value) => value)

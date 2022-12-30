@@ -7,28 +7,30 @@ import {
   FormControlLabel,
   Grid,
   InputAdornment,
-  LinearProgress,
   TextField,
 } from '@mui/material'
-import { $rememberMe, loginUserFx, setRememberMe } from '../../store/auth'
+import { loginUserFx, setRememberMe } from '../../store/auth'
 import { REGISTRATION_PAGE } from '../../utils/consts'
 import { Link } from 'react-router-dom'
 import { useStore } from 'effector-react'
 import { useForm } from 'effector-forms'
-import { loginForm } from '../../store/forms'
+import { loginForm } from '../../store/forms/forms'
 import { $errorApi } from '../../store/alerts'
 import { Visibility } from '@mui/icons-material'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 export const LoginForm = () => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [remember, setRemember] = useState<boolean>(true)
 
-  const { fields, submit, eachValid } = useForm(loginForm)
+  const { fields, submit, eachValid, errorText } = useForm(loginForm)
   const pending = useStore(loginUserFx.pending)
   const apiError = useStore($errorApi)
-  const rememberMe = useStore($rememberMe)
+
 
   const onSubmit = (e: React.FormEvent<HTMLInputElement>) => {
+    setRememberMe(remember)
     e.preventDefault()
     submit()
   }
@@ -47,12 +49,15 @@ export const LoginForm = () => {
         onChange={(e) => fields.username.onChange(e.target.value)}
       />
       {fields.username.errors.length > 0 &&
-        <Alert variant='filled' severity='error'>You must use only eng symbols and numbers</Alert>}
+        <Alert variant='filled' severity='error'>{errorText('username')}</Alert>}
+
       <TextField
         InputProps={{
           endAdornment: (
             <InputAdornment position='start'>
-              <Visibility sx={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)} />
+              {showPassword ?
+                <VisibilityOffIcon sx={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)} /> :
+                <Visibility sx={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)} />}
             </InputAdornment>
           ),
         }}
@@ -68,14 +73,17 @@ export const LoginForm = () => {
         onChange={(e) => fields.password.onChange(e.currentTarget.value)}
       />
       {fields.password.errors.length > 0 &&
-        <Alert variant='filled' severity='error'>Password is required</Alert>}
+        <Alert variant='filled' severity='error'>{errorText('password')}</Alert>}
 
       <FormControlLabel
-        control={<Checkbox value='remember' color='primary' />}
-        onClick={() => setRememberMe(!rememberMe)}
+        control={<Checkbox value={remember} color='primary' />}
+        onClick={() => {
+          setRemember(!remember)
+        }}
         label='Remember me'
       />
       {apiError && <Alert variant='filled' severity='warning'>{apiError}</Alert>}
+
       <Button
         type='submit'
         fullWidth

@@ -20,7 +20,7 @@ const App = () => {
 
 
   useEffect(() => {
-    isAuth && navigate(COSTS_PAGE)
+    isAuth?  navigate(COSTS_PAGE) : navigate(LOGIN_PAGE)
     errorApi ? setTimeout(() => {
       setApiError('')
     }, 5000) : null
