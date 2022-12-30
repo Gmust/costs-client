@@ -10,9 +10,7 @@ export class AuthClient {
       const result = await $unAuthHost.post('/auth/login', { username, password })
       localStorage.setItem('token', result.data.access_token)
       localStorage.setItem('username', result.data.username)
-      console.log(rememberMe)
       rememberMe ? localStorage.setItem('refresh_token', result.data.refresh_token) : null
-      console.log(result.data.refresh_token)
       setIsAuth(true)
       return result.data
     } catch (e: any) {

@@ -56,10 +56,11 @@ export const Costs = () => {
 
         <Box sx={{mt: 2, display: 'flex', flexWrap:'wrap', width: '80vw', alignItems: 'center'}}  >
           {
-            pending ?
-            <CostsSkeleton amount={18} />
-              :
-              useMemo(() => <CostsList costs={costs} />, [costs])
+            pending &&  <CostsSkeleton amount={18} />
+
+          }
+          {
+            useMemo(() => <CostsList costs={costs} />, [costs])
           }
         </Box>
       </Box>
