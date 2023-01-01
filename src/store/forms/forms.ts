@@ -59,11 +59,15 @@ export const createCostForm = createForm({
   fields: {
     text: {
       init: '' as string,
+      rules: [
+        rules.required(),
+      ]
     },
     price: {
       init: 0 as number,
       rules: [
         rules.priceField(),
+        rules.required(),
       ],
     },
     date: {
@@ -79,6 +83,7 @@ export const updateCostForm = createForm({
       init: '' as string,
       rules: [
         rules.textField(),
+        rules.required()
       ],
     },
     price: {
@@ -94,7 +99,7 @@ export const updateCostForm = createForm({
       init: null,
     },
   },
-  validateOn: ['submit'],
+  validateOn: ['change'],
 })
 
 forward({

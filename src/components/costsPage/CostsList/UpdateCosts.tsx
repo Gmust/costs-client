@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { useForm } from 'effector-forms'
 import { updateCostForm } from '../../../store/forms/forms'
 import { Alert, Button, CardActions, CardContent, TextField, Tooltip } from '@mui/material'
@@ -8,6 +8,7 @@ import { Cancel, Save } from '@mui/icons-material'
 import { Dayjs } from 'dayjs'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { Navbar } from '../../navbar/Navbar'
 
 type TUpdateCostsForm = {
   id: string | number,
@@ -23,7 +24,19 @@ export const UpdateCosts = ({ setEdit, id, text, price }: TUpdateCostsForm) => {
   const pending = useStore(updateCostsFx.pending)
   setSelectedId(id)
 
+  useEffect(() => {
+    if (isNaN(fields.price.value)) {
+      fields.price.set(0)
+    }
+  }, [fields.price.value])
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (fields.price.value === 0) {
+      fields.price.set(price)
+    }
+    if (fields.text.value === '') {
+      fields.text.set(text)
+    }
     e.preventDefault()
     submit()
     reset()
@@ -69,11 +82,12 @@ export const UpdateCosts = ({ setEdit, id, text, price }: TUpdateCostsForm) => {
           required
           label='Amount'
           variant='outlined'
-          value={fields.price.value}
+          defaultValue={price}
           onChange={(e) => fields.price.onChange(Number(e.target.value))}
         />
         {fields.price.errors.length > 0 &&
           <Alert variant='filled' severity='error'>{errorText('price')}</Alert>}
+
         <CardActions sx={{ display: 'flex', maxWidth: '10px' }}>
           <Tooltip title='Save'>
             <Button type='submit' disabled={pending || !eachValid} color='success'><Save /></Button>

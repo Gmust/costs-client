@@ -56,7 +56,7 @@ export const CostsItem = ({ date, text, price, _id }: ICosts) => {
       {pending && <LinearProgress/>}
     </Container>*/
 
-    <Card sx={{ minWidth: 200, maxWidth: 300, margin: 1 }}>
+    <Card sx={{ minWidth: 200, maxWidth: 300, minHeight: 180, margin: 1 }}>
       {edit
         ?
         <UpdateCosts
