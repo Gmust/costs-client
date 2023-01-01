@@ -9,31 +9,36 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material'
-import { loginUserFx, setRememberMe } from '../../store/auth'
+import { $rememberMe, loginUserFx, setRememberMe } from '../../store/auth'
 import { REGISTRATION_PAGE } from '../../utils/consts'
 import { Link } from 'react-router-dom'
 import { useStore } from 'effector-react'
 import { useForm } from 'effector-forms'
 import { loginForm } from '../../store/forms/forms'
-import { $errorApi } from '../../store/alerts'
+import { $errorApi, $successAlert } from '../../store/alerts'
 import { Visibility } from '@mui/icons-material'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 export const LoginForm = () => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [remember, setRemember] = useState<boolean>(true)
 
   const { fields, submit, eachValid, errorText } = useForm(loginForm)
   const pending = useStore(loginUserFx.pending)
   const apiError = useStore($errorApi)
+  const rememberMe = useStore($rememberMe)
+  const successAlert = useStore($successAlert)
 
 
   const onSubmit = (e: React.FormEvent<HTMLInputElement>) => {
-    setRememberMe(remember)
     e.preventDefault()
     submit()
   }
+
+  const handleRememberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRememberMe(event.target.checked)
+  };
+
 
   return (
     <Box component='form' onSubmit={onSubmit} sx={{ mt: 1 }}>
@@ -76,13 +81,15 @@ export const LoginForm = () => {
         <Alert variant='filled' severity='error'>{errorText('password')}</Alert>}
 
       <FormControlLabel
-        control={<Checkbox value={remember} color='primary' />}
-        onClick={() => {
-          setRemember(!remember)
-        }}
+        control={
+          <Checkbox value={rememberMe} color='primary' checked={rememberMe}
+                    onChange={handleRememberChange}
+          />
+        }
         label='Remember me'
       />
       {apiError && <Alert variant='filled' severity='warning'>{apiError}</Alert>}
+      {successAlert && <Alert variant='filled' severity='success'>{successAlert}</Alert>}
 
       <Button
         type='submit'

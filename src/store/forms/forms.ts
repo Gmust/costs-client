@@ -12,12 +12,13 @@ export const loginForm = createForm({
       rules: [
         rules.username(),
         rules.required(),
-        rules.minLength(4),
+        rules.minLength(3),
       ],
     },
     password: {
       init: '',
       rules: [
+        rules.passwordField(),
         rules.required(),
         rules.minLength(6),
       ],
@@ -32,12 +33,13 @@ export const registerForm = createForm({
       init: '',
       rules: [
         rules.username(),
-        rules.minLength(4),
+        rules.minLength(3),
       ],
     },
     password: {
       init: '',
       rules: [
+        rules.passwordField(),
         rules.minLength(6),
         rules.required(),
       ],

@@ -43,4 +43,11 @@ export const rules = {
       errorText: 'This field is required',
     }),
   }),
+  passwordField: (): Rule<string> =>({
+    name: 'password',
+    validator: (value)=>({
+      isValid: /^[a-z]+[a-z0-9]*$/i.test(value),
+      errorText: 'Password must contain only eng symbols and numbers '
+    })
+  })
 }

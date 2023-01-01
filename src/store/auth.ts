@@ -27,10 +27,8 @@ export const setRememberMe = auth.createEvent<boolean>()
 export const $username = auth.createStore<string>('')
   .on(loginUserFx.doneData, (_, data) => data.username)
 
-export const $rememberMe = auth.createStore(false)
-  .on(setRememberMe,  (_, value) => {
-    return !value
-  })
+export const $rememberMe = auth.createStore(true)
+  .on(setRememberMe,  (_, value) => value)
 
 
 export const $isAuth = auth.createStore<boolean>(false)
